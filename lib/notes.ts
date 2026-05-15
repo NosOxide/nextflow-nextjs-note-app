@@ -4,6 +4,7 @@ export interface Note {
   content: string;
   createdAt: string;
   updatedAt: string;
+  pinned?: boolean;
 }
 
 const STORAGE_KEY = "nextflow_notes";
@@ -23,9 +24,11 @@ function writeStorage(notes: Note[]): void {
 }
 
 export function getNotes(): Note[] {
-  return readStorage().sort(
-    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-  );
+  return readStorage().sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+  });
 }
 
 export function getNote(id: string): Note | undefined {
@@ -60,4 +63,13 @@ export function saveNote(
 
 export function deleteNote(id: string): void {
   writeStorage(readStorage().filter((n) => n.id !== id));
+}
+
+export function togglePin(id: string): void {
+  const notes = readStorage();
+  const note = notes.find((n) => n.id === id);
+  if (note) {
+    note.pinned = !note.pinned;
+    writeStorage(notes);
+  }
 }

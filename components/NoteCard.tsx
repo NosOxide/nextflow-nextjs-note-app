@@ -4,9 +4,10 @@ import { Note } from "@/lib/notes";
 interface NoteCardProps {
   note: Note;
   onDelete: (id: string) => void;
+  onPin: (id: string) => void;
 }
 
-export default function NoteCard({ note, onDelete }: NoteCardProps) {
+export default function NoteCard({ note, onDelete, onPin }: NoteCardProps) {
   const snippet = note.content.length > 100
     ? note.content.slice(0, 100) + "…"
     : note.content;
@@ -25,13 +26,23 @@ export default function NoteCard({ note, onDelete }: NoteCardProps) {
         <span className="text-xs text-gray-400">
           {new Date(note.updatedAt).toLocaleDateString()}
         </span>
-        <button
-          onClick={() => onDelete(note.id)}
-          className="text-xs text-red-400 hover:text-red-600 transition-colors"
-          aria-label="Delete note"
-        >
-          Delete
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => onPin(note.id)}
+            className="text-sm hover:text-yellow-500 transition-colors"
+            aria-label={note.pinned ? "Unpin note" : "Pin note"}
+            title={note.pinned ? "Unpin" : "Pin"}
+          >
+            {note.pinned ? '📌' : '📍'}
+          </button>
+          <button
+            onClick={() => onDelete(note.id)}
+            className="text-xs text-red-400 hover:text-red-600 transition-colors"
+            aria-label="Delete note"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   );

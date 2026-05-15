@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import NoteCard from "@/components/NoteCard";
-import { getNotes, deleteNote, Note } from "@/lib/notes";
+import { getNotes, deleteNote, togglePin, Note } from "@/lib/notes";
 
 export default function HomePage() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -14,6 +14,11 @@ export default function HomePage() {
 
   const handleDelete = (id: string) => {
     deleteNote(id);
+    setNotes(getNotes());
+  };
+
+  const handlePin = (id: string) => {
+    togglePin(id);
     setNotes(getNotes());
   };
 
@@ -42,7 +47,7 @@ export default function HomePage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {notes.map((note) => (
-            <NoteCard key={note.id} note={note} onDelete={handleDelete} />
+            <NoteCard key={note.id} note={note} onDelete={handleDelete} onPin={handlePin} />
           ))}
         </div>
       )}

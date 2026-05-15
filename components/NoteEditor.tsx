@@ -27,9 +27,14 @@ export default function NoteEditor({
         />
       </div>
       <div>
-        <label htmlFor="note-content" className="block text-sm font-medium text-gray-700 mb-1">
-          Content
-        </label>
+        <div className="flex items-center justify-between mb-1">
+          <label htmlFor="note-content" className="text-sm font-medium text-gray-700">
+            Content
+          </label>
+          <p className="text-xs text-gray-400">
+            {content.length} character{content.length !== 1 ? 's' : ''}
+          </p>
+        </div>
         <textarea
           id="note-content"
           value={content}
